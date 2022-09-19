@@ -1,10 +1,13 @@
 package com.vti.service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.vti.dto.GroupDTO;
@@ -12,72 +15,56 @@ import com.vti.entity.Group;
 import com.vti.form.GroupFormForCreating;
 import com.vti.form.GroupFromForUpdating;
 import com.vti.repository.IGroupRepository;
+import com.vti.specification.GroupSpec;
 
 @Service
+@Primary
 public class GroupService implements IGroupService {
 
 	@Autowired
 	private IGroupRepository repository;
+
 	@Override
-	public List<GroupDTO> getAllGroups() { // convert group --> groupDTO
-		List<Group> groups = repository.findAll();
-		List<GroupDTO> grDTOs = new ArrayList<>();
+	public Page<Group> getAllGroups(Pageable pageable) { // convert group --> groupDTO
 		
-		List<String> a = Collections.EMPTY_LIST;
-		
-		for (String a1 : a) {
-			System.out.println(a1);
-		}
-		
-		for (Group group : groups) {
-			GroupDTO grDTO = new GroupDTO();
-			grDTO.setId(group.getId());
-			grDTO.setGroupName(group.getGroupName());
-			grDTO.setMember(group.getMember());
-			grDTO.setCreator(group.getCreator());
-			grDTO.setCreateDate(group.getCreateDate());
-			
-			grDTOs.add(grDTO);
-		}
-		return grDTOs;
+		return repository.findAll(pageable);
 	}
-	@Override
-	public GroupDTO getGroupByID(int id) {
-		Group group = repository.findById(id).get();
-		GroupDTO grDTO = new GroupDTO();
+	
+	public Page<Group> getAllGroupsV2(Pageable pageable, String search) { // convert group --> groupDTO
 		
-		grDTO.setId(group.getId());
-		grDTO.setGroupName(group.getGroupName());
-		grDTO.setMember(group.getMember());
-		grDTO.setCreator(group.getCreator());
-		
-		
-		return grDTO;
+		Specification<Group> where = GroupSpec.buildWhere(search);
+		return repository.findAll(where,pageable);
 	}
 
 	@Override
-	public Group addGroup(GroupFormForCreating form) {
-		if (form != null) {  
-			// convert form --> entity:  
-			Group group = new Group(form.getGroupName(), form.getMember(),form.getCreator(),form.getCreateDate());
-			return repository.save(group);
-		}
-		return null;
+	public Group getGroupByID(int id) {
+		return repository.findById(id).get();
+	}
+
+	@Override
+	public String addGroup(GroupFormForCreating form) {
+			if(repository.existsByGroupName(form.getGroupName())) {
+				return "This group is alredy exists, cannot create...";
+			}
+			// convert form --> entity:
+			Group group = new Group(form.getGroupName(), form.getMember(), form.getCreator(), form.getCreateDate());
+			 repository.save(group);
+		
+		return "Create Success!";
 	}
 
 	@Override
 	public void updateGroup(int id, GroupFromForUpdating form) {
 		if (form != null) {
 //			GroupDTO groupUpdate = getGroupByID(id);
-			
+
 			Group groupUpdate = repository.findById(id).get();
-			
-			
+
 			if (groupUpdate != null) {
 				groupUpdate.setGroupName(form.getGroupName());
 				groupUpdate.setMember(form.getMember());
-				 repository.save(groupUpdate);
-				 System.out.println("Update Succsess");
+				repository.save(groupUpdate);
+				System.out.println("Update Succsess");
 			}
 
 		}
@@ -94,6 +81,21 @@ public class GroupService implements IGroupService {
 		}
 
 		return false;
+	}
+
+	@Override
+	public List<Group> findByIdGreaterThanEqual(int id) {
+
+		List<Group> groups = repository.findByIdGreaterThanEqual(id);
+		if (groups.size() > 0) {
+			return repository.findByIdGreaterThanEqual(id);
+		}
+		return null;
+	}
+
+	@Override
+	public Group getGroupByGroupNameAndMember(String groupName, Integer member) {
+		return repository.getGroupByGroupNameAndMember(groupName,member);
 	}
 
 }
