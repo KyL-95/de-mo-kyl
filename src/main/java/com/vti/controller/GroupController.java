@@ -28,6 +28,9 @@ import com.vti.form.GroupFromForUpdating;
 import com.vti.service.IGroupService;
 // Khánh vừa sửa xong
 // Đã update
+
+
+// Hôm sau làm
 @RestController
 @RequestMapping(value = "/api/v1/groups")
 @CrossOrigin("*") // cho phép ajax bên frontend truy cập API của backend
