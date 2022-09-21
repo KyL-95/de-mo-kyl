@@ -5,7 +5,6 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -26,9 +25,9 @@ import com.vti.dto.GroupDTO;
 import com.vti.entity.Group;
 import com.vti.form.GroupFormForCreating;
 import com.vti.form.GroupFromForUpdating;
-import com.vti.responobject.ResponseObj;
 import com.vti.service.IGroupService;
 // Khánh vừa sửa xong
+// Đã update
 @RestController
 @RequestMapping(value = "/api/v1/groups")
 @CrossOrigin("*") // cho phép ajax bên frontend truy cập API của backend
