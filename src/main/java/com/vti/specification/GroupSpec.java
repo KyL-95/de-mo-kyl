@@ -14,12 +14,12 @@ import lombok.RequiredArgsConstructor;
 
 public class GroupSpec {
 
-	public static Specification<Group> buildWhere(String search){
+	public static Specification<Group> buildWhere( String search){
 		if(search.isBlank()) {
 			return null;
 		}
 		search = search.trim();
-		
+
 		CustomSpec groupName = new CustomSpec("groupName",search);
 		return Specification.where(groupName);
 	}
