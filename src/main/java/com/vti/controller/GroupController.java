@@ -38,27 +38,27 @@ public class GroupController {
 	@Autowired
 	private IGroupService service;
 
-//	@GetMapping()
-//	public ResponseEntity<?> getAllGroups(Pageable pageable) {
-//		Page<Group> grPages = service.getAllGroups(pageable);
-//		if (grPages.isEmpty() || grPages == null) {
-//		return new ResponseEntity<>(new ResponseObj("Not found", "Cannot find data", grPages),
-//				HttpStatus.NOT_FOUND);
-//	}
-//		// get List<Entity> from Page<Entity>
-//		List<Group> grList = grPages.getContent();
-//		// convert List<Entity> ---> List <DTO>
-//		List<GroupDTO> dtoList = modelMapper.map(grList, new TypeToken<List<GroupDTO>>() {}.getType());
-//		// convert Page<Entity> ---> Page<DTO>
-//		Page<GroupDTO> dtoPages = new PageImpl<>(dtoList, pageable, grPages.getTotalElements());
-//		return new ResponseEntity<>(dtoPages, HttpStatus.OK);
-//	}
-	
 	@GetMapping()
+	public ResponseEntity<?> getAllGroups(Pageable pageable) {
+		Page<Group> grPages = service.getAllGroups(pageable);
+		if (grPages.isEmpty() || grPages == null) {
+		return new ResponseEntity<>(new ResponseObj("Not found", "Cannot find data", grPages),
+				HttpStatus.NOT_FOUND);
+	}
+		// get List<Entity> from Page<Entity>
+		List<Group> grList = grPages.getContent();
+		// convert List<Entity> ---> List <DTO>
+		List<GroupDTO> dtoList = modelMapper.map(grList, new TypeToken<List<GroupDTO>>() {}.getType());
+		// convert Page<Entity> ---> Page<DTO>
+		Page<GroupDTO> dtoPages = new PageImpl<>(dtoList, pageable, grPages.getTotalElements());
+		return new ResponseEntity<>(dtoPages, HttpStatus.OK);
+	}
+	
+	@GetMapping("/v2")
 	public Page<GroupDTO> getAllGroupsV2(
-			Pageable pageable, 
+			Pageable pageable,
 			@RequestParam(value = "search", required = false) String search){
-		
+
 		Page<Group> grPages = service.getAllGroupsV2(pageable, search);
 		// get List<Entity> from Page<Entity>
 		List<Group> grList = grPages.getContent();
