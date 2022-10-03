@@ -2,6 +2,7 @@ package com.vti.controller;
 
 import java.util.List;
 
+import com.vti.responobject.ResponseObj;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import com.vti.service.IGroupService;
 
 
 // Hôm sau làm
+<<<<<<< HEAD
 // merge into main
 
 @RestController
@@ -45,7 +47,7 @@ public class GroupController {
 	@GetMapping()
 	public ResponseEntity<?> getAllGroups(Pageable pageable) {
 		Page<Group> grPages = service.getAllGroups(pageable);
-		if (grPages.isEmpty() || grPages == null) {
+		if (grPages.isEmpty()) {
 		return new ResponseEntity<>(new ResponseObj("Not found", "Cannot find data", grPages),
 				HttpStatus.NOT_FOUND);
 	}
