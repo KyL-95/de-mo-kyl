@@ -31,6 +31,8 @@ import com.vti.service.IGroupService;
 
 
 // Hôm sau làm
+
+// merge test branch into main branch
 @RestController
 @RequestMapping(value = "/api/v1/groups")
 @CrossOrigin("*") // cho phép ajax bên frontend truy cập API của backend
